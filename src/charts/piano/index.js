@@ -2,7 +2,7 @@
 
 import * as d3 from "d3";
 import { getNotByIndex, isMainNote } from "../../utils/noteHelper";
-import sound from "../../assets/piano-sounds/B2.mp3";
+import AudioPlayer from "../../utils/audioPlayer";
 
 class piano {
   constructor(
@@ -17,6 +17,7 @@ class piano {
     this._widthRatio = widthRatio;
     this._heightRatio = heightRatio;
     this._keyCount = keyCount;
+    this._audioPlayer = new AudioPlayer(this._selector);
   }
 
   whiteCount(keyIndex) {
@@ -36,7 +37,7 @@ class piano {
       return {
         index: i,
         type: isMainNote(i) ? "white" : "black",
-        note: getNotByIndex(i, 2),
+        note: getNotByIndex(i, 4),
         coord: {
           x: {
             min: whiteWidth * this.whiteCount(i) + offset,
@@ -94,31 +95,7 @@ class piano {
   }
 
   attachSoundPlayer() {
-    d3.select(this._selector)
-      .append("audio")
-      .attr("id", "audio")
-      .append("source")
-      .attr("id", "audio-source")
-      .attr("src", "");
-
-    document.body.addEventListener(
-      "click",
-      (event) => {
-        event.preventDefault();
-
-        const classes = event.target.className.baseVal.split(" ");
-        console.log(classes[1]);
-
-        const source = document.getElementById("audio-source");
-        source.src = sound;
-
-        const audio = document.getElementById("audio");
-        console.log(audio);
-        audio.load();
-        audio.play();
-      },
-      true
-    );
+    this._audioPlayer.attachSoundPlayer();
   }
 }
 
