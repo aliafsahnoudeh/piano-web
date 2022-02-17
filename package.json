@@ -30,6 +30,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "file-loader": "^6.2.0",
     "prettier": "^2.4.1",
     "script-loader": "^0.7.2",
     "storybook": "^6.3.12",

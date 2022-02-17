@@ -2,6 +2,7 @@
 
 import * as d3 from "d3";
 import { getNotByIndex, isMainNote } from "../../utils/noteHelper";
+import sound from "../../assets/piano-sounds/B2.mp3";
 
 class piano {
   constructor(
@@ -35,7 +36,7 @@ class piano {
       return {
         index: i,
         type: isMainNote(i) ? "white" : "black",
-        note: getNotByIndex(i),
+        note: getNotByIndex(i, 2),
         coord: {
           x: {
             min: whiteWidth * this.whiteCount(i) + offset,
@@ -106,12 +107,14 @@ class piano {
         event.preventDefault();
 
         const classes = event.target.className.baseVal.split(" ");
-        console.log(classes[0]);
+        console.log(classes[1]);
 
         const source = document.getElementById("audio-source");
+        source.src = sound;
 
-        source.src = classes[1];
         const audio = document.getElementById("audio");
+        console.log(audio);
+        audio.load();
         audio.play();
       },
       true

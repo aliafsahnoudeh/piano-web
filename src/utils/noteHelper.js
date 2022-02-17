@@ -1,9 +1,9 @@
-const notes = ["c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"];
+const notes = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
 
-export const getNotByIndex = (index) => {
+export const getNotByIndex = (index, tolerance) => {
   return {
     note: notes[index % 12],
-    number: Math.floor(index / 12),
+    number: Math.floor(index / 12) + tolerance,
   };
 };
 

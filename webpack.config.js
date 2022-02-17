@@ -10,4 +10,15 @@ module.exports = {
       name: "piano-web",
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.mp3$/,
+        loader: "file-loader",
+        options: {
+          name: "[path][name].[ext]",
+        },
+      },
+    ],
+  },
 };
