@@ -18,6 +18,7 @@ class audioPlayer {
       (event) => {
         event.preventDefault();
         const classes = event.target.className.baseVal.split(" ");
+        // TODO prevent playing if it's not a piano key
         this.play(classes[1]);
       },
       true
@@ -25,10 +26,10 @@ class audioPlayer {
   }
 
   play(note) {
-    const source = document.getElementById("audio-source");
     import(
-      /* webpackChunkName: "audio" */ `../assets/piano-sounds/${note}.mp3`
+      /* webpackChunkName: "audio-assets" */ `../assets/piano-sounds/${note}.mp3`
     ).then((module) => {
+      const source = document.getElementById("audio-source");
       const sound = module.default;
       source.src = sound;
 
