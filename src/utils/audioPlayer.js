@@ -1,4 +1,7 @@
 import * as d3 from "d3";
+import { mapKeydownToNote } from "./noteHelper";
+
+// TODO multi note playing at the same time, maybe another solution like Web Audio
 
 class audioPlayer {
   constructor(selector) {
@@ -23,9 +26,18 @@ class audioPlayer {
       },
       true
     );
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        this.play(mapKeydownToNote(event.key));
+      },
+      false
+    );
   }
 
   play(note) {
+    console.log(note);
     import(
       /* webpackChunkName: "audio-assets" */ `../assets/piano-sounds/${note}.mp3`
     ).then((module) => {
