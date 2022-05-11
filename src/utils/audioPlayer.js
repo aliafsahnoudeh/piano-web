@@ -6,6 +6,7 @@ class audioPlayer {
     this._selector = selector;
     this._sources = {};
     this._audios = {};
+    this._fired = {};
   }
 
   attachSoundPlayer() {
@@ -24,10 +25,14 @@ class audioPlayer {
     document.body.addEventListener(
       "click",
       (event) => {
-        event.preventDefault();
-        const classes = event.target.className.baseVal.split(" ");
-        // TODO prevent playing if it's not a piano key
-        this.play(classes[1]);
+        event.stopPropagation();
+        if (event.target.className.baseVal) {
+          const classes = event.target.className.baseVal.split(" ");
+          if (this._sources[classes[1]]) this.play(classes[1]);
+          setTimeout(() => {
+            this._fired[classes[1]] = false;
+          }, 200);
+        }
       },
       true
     );
@@ -35,28 +40,42 @@ class audioPlayer {
     document.addEventListener(
       "keydown",
       (event) => {
+        // TODO debounce keydown
+        event.stopPropagation();
         this.play(mapKeydownToNote(event.key));
+      },
+      false
+    );
+
+    document.addEventListener(
+      "keyup",
+      (event) => {
+        const note = mapKeydownToNote(event.key);
+        if (this._sources[note]) this._fired[note] = false;
       },
       false
     );
   }
 
   play(note) {
-    if (this._sources[note] && !this._sources[note].src.includes(".mp3")) {
-      import(
-        /* webpackChunkName: "audio-assets" */ `../assets/piano-sounds/${note}.mp3`
-      ).then((module) => {
-        const sound = module.default;
-        this._sources[note].src = sound;
+    if (this._sources[note] && !this._fired[note]) {
+      this._fired[note] = true;
+      if (!this._sources[note].src.includes(".mp3")) {
+        import(
+          /* webpackChunkName: "audio-assets" */ `../assets/piano-sounds/${note}.mp3`
+        ).then((module) => {
+          const sound = module.default;
+          this._sources[note].src = sound;
 
+          const audio = this._audios[note];
+          audio?.load();
+          audio?.play();
+        });
+      } else {
         const audio = this._audios[note];
-        audio.load();
-        audio.play();
-      });
-    } else {
-      const audio = this._audios[note];
-      audio.load();
-      audio.play();
+        audio?.load();
+        audio?.play();
+      }
     }
   }
 }

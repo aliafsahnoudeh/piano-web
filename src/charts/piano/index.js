@@ -20,6 +20,15 @@ class piano {
     this._audioPlayer = new AudioPlayer(this._selector);
   }
 
+  draw() {
+    this.render();
+    this.attachSoundPlayer();
+  }
+
+  erase() {
+    this._svg.remove();
+  }
+
   whiteCount(keyIndex) {
     return d3
       .range(keyIndex)
@@ -99,8 +108,4 @@ class piano {
   }
 }
 
-export default function (selector, data, configs, callbacks) {
-  const pinaoInstance = new piano(selector, data, configs, callbacks);
-  pinaoInstance.render();
-  pinaoInstance.attachSoundPlayer();
-}
+export default piano;
