@@ -1,20 +1,25 @@
 import * as d3 from "d3";
-import { mapKeydownToNote } from "./noteHelper";
-
-// TODO multi note playing at the same time, maybe another solution like Web Audio
+import { mapKeydownToNote, visibleNotes } from "./noteHelper";
 
 class audioPlayer {
   constructor(selector) {
     this._selector = selector;
+    this._sources = {};
+    this._audios = {};
   }
 
   attachSoundPlayer() {
-    d3.select(this._selector)
-      .append("audio")
-      .attr("id", "audio")
-      .append("source")
-      .attr("id", "audio-source")
-      .attr("src", "");
+    visibleNotes.forEach((note) => {
+      d3.select(this._selector)
+        .append("audio")
+        .attr("id", `audio-${note}`)
+        .append("source")
+        .attr("id", `audio-source-${note}`)
+        .attr("src", "");
+
+      this._sources[note] = document.getElementById(`audio-source-${note}`);
+      this._audios[note] = document.getElementById(`audio-${note}`);
+    });
 
     document.body.addEventListener(
       "click",
@@ -37,18 +42,22 @@ class audioPlayer {
   }
 
   play(note) {
-    console.log(note);
-    import(
-      /* webpackChunkName: "audio-assets" */ `../assets/piano-sounds/${note}.mp3`
-    ).then((module) => {
-      const source = document.getElementById("audio-source");
-      const sound = module.default;
-      source.src = sound;
+    if (this._sources[note] && !this._sources[note].src.includes(".mp3")) {
+      import(
+        /* webpackChunkName: "audio-assets" */ `../assets/piano-sounds/${note}.mp3`
+      ).then((module) => {
+        const sound = module.default;
+        this._sources[note].src = sound;
 
-      const audio = document.getElementById("audio");
+        const audio = this._audios[note];
+        audio.load();
+        audio.play();
+      });
+    } else {
+      const audio = this._audios[note];
       audio.load();
       audio.play();
-    });
+    }
   }
 }
 

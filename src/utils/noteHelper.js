@@ -26,6 +26,29 @@ const key = {
   // j: "B5",
 };
 
+export const visibleNotes = [
+  "C4",
+  "Db4",
+  "D4",
+  "Eb4",
+  "E4",
+  "F4",
+  "Gb4",
+  "G4",
+  "Ab4",
+  "A4",
+  "Bb4",
+  "B4",
+  "C5",
+  "Db5",
+  "D5",
+  "Eb5",
+  "E5",
+  "F5",
+  "Gb5",
+  "G5",
+];
+
 export const getNotByIndex = (index, tolerance) => {
   return {
     note: notes[index % 12],
