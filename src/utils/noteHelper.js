@@ -47,6 +47,10 @@ export const visibleNotes = [
   "F5",
   "Gb5",
   "G5",
+  "Ab5",
+  "A5",
+  "Bb5",
+  "B5",
 ];
 
 export const getNotByIndex = (index, tolerance) => {
