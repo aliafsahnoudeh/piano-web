@@ -22,7 +22,9 @@ class audioPlayer {
       this._audios[note] = document.getElementById(`audio-${note}`);
     });
 
-    document.body.addEventListener(
+    const chartElement = document.getElementById("chart");
+
+    chartElement.addEventListener(
       "click",
       (event) => {
         event.stopPropagation();
